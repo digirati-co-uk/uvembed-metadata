@@ -35,12 +35,12 @@ We encourage everyone to contribute their ideas, thoughts and code snippets. Thi
 
 ## Upgrade Notice
 
-= 1.0.0 =
+### 1.0.0 ###
 * 2016-08-15
 * Initial release.
 
 ## Changelog
 
-= 1.0.0 =
+### 1.0.0 ###
 * 2016-08-15
 * Initial release.
