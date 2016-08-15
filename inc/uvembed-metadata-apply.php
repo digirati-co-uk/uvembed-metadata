@@ -38,19 +38,23 @@ function uvembed_metadata_apply( $post_id ) {
 		$metaData = uvembed_metadata_getWorkMetadata( $works );
 
 		// Save the metadata to custom field/fields on this post
+		if(!empty($metaData)) {
+			// as json - mostly for future reference
+			$metaDataJson = json_encode( $metaData );
 
-		// as json - mostly for future reference
-		$metaDataJson = json_encode( $metaData );
+			// as string - for searching
+			$metaDataString = uvembed_metadata_metaToString( $metaData );
 
-		// as string - for searching
-		$metaDataString = uvembed_metadata_metaToString($metaData);
-
-		// add/update post meta
-		update_post_meta( $post_id, 'uvembed_metadata_json', $metaDataJson );
-		update_post_meta( $post_id, 'uvembed_metadata_string', $metaDataString );
+			// add/update post meta
+			update_post_meta( $post_id, 'uvembed_metadata_json', $metaDataJson );
+			update_post_meta( $post_id, 'uvembed_metadata_string', $metaDataString );
+		} else {
+			// add/update post meta
+			delete_post_meta( $post_id, 'uvembed_metadata_json' );
+			delete_post_meta( $post_id, 'uvembed_metadata_string' );
+		}
 
 	}
-
 
 }
 
@@ -113,39 +117,41 @@ function uvembed_metadata_getWorkMetadata( $works ) {
 
 	foreach ( $works as $work ) {
 		$url = $uvEmbedOptions['uvembed_metadata_endpoint'];
-		$url            = 'http://dev.rcvs/dev/{{work}}.manifest';
 		$data = array();
 		$url  = preg_replace( '/{{work}}/', $work, $url );
 
 		// Get Manifest
 
 		$ch = curl_init(); //  Initiate curl
-		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, true ); // Enable SSL verification
+		curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false ); // Enable SSL verification
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true ); // Will return the response, if false it print the response
 		curl_setopt( $ch, CURLOPT_URL, $url ); // Set the url
 		$result = curl_exec( $ch ); // Execute
 		curl_close( $ch ); // Closing
 		$manifest = json_decode( $result, true );
 
-		// look in metadata field
-		$data[] = $manifest['metadata'];
-		// look in each sequences section
-		foreach ( $manifest['sequences'] as $sequence ) {
-			foreach ( $sequence['canvases'] as $canvas ) {
-				array_push( $data, $canvas['metadata'] );
+		if(!empty($manifest)) {
+			// look in metadata field
+			$data[] = $manifest['metadata'];
+			// look in each sequences section
+			foreach ( $manifest['sequences'] as $sequence ) {
+				foreach ( $sequence['canvases'] as $canvas ) {
+					array_push( $data, $canvas['metadata'] );
+				}
 			}
+
+			// flatten the data
+			$dataFlat = array();
+			array_walk_recursive( $data, function ( $v, $k ) use ( &$dataFlat ) {
+				if ( $k == 'value' ) {
+					$dataFlat[] = sanitize_text_field( $v );
+				}
+			} );
+
+			// return unique array
+			$metadata[ $work ] = array_unique( $dataFlat );
+
 		}
-
-		// flatten the data
-		$dataFlat = array();
-		array_walk_recursive( $data, function ( $v, $k ) use ( &$dataFlat ) {
-			if ( $k == 'value' ) {
-				$dataFlat[] = sanitize_text_field( $v );
-			}
-		} );
-
-		// return unique array
-		$metadata[ $work ] = array_unique( $dataFlat );
 
 	}
 
