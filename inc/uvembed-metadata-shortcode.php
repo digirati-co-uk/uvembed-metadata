@@ -32,12 +32,11 @@ function uvembed_shortcode($atts)
         'uvembed'
     );
 
-    $uvEmbedUrl = 'http://universalviewer.io/uv/lib/embed.js';
-    $uvConfigUrl = 'http://universalviewer.io/config.json';
-
+	$uvEmbedUrl = (!empty($settings['uvembed_metadata_embedurl'])) ? $settings['uvembed_metadata_embedurl'] : 'http://universalviewer.io/uv/lib/embed.js';
+	$uvConfigUrl = (!empty($settings['uvembed_metadata_configurl'])) ? $settings['uvembed_metadata_configurl'] : 'http://universalviewer.io/config.json';
     $uvDataUri = preg_replace('/{{work}}/', $a['work'], $endpoint);
     $style = 'width: 100%; height: 600px; background-color: #000;';
-
+	
     $shortcode = '<div class="uv" data-uri="' . $uvDataUri . '" data-config="' . $uvConfigUrl . '" style="' . $style . '"></div>';
     $shortcode .= '<script type="text/javascript" id="embedUV" src="' . $uvEmbedUrl . '"></script>';
 

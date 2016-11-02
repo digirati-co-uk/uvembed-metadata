@@ -57,6 +57,7 @@ class Uvembed_Metadata_Settings
         $this->options = get_option('uvembed_metadata_group_name');
         ?>
         <div class="wrap">
+            <h1>UV Embed Meta Data Settings</h1>
             <form method="post" action="options.php">
                 <?php
                 // This prints out all hidden setting fields
@@ -82,17 +83,51 @@ class Uvembed_Metadata_Settings
 
         add_settings_section(
             'uvembed_metadata_section', // ID
-            'UV Embed Metadata Settings', // Title
+            'Manifest Pattern', // Title
             array($this, 'print_uvembed_metadata_endpoint_section_info'), // Callback
             'uvembed-metadata' // Page
         );
 
         add_settings_field(
             'uvembed_metadata_endpoint', // ID
-            'UV Embed Endpoint', // Title
+            'Manifest Url Pattern', // Title
             array($this, 'uvembed_metadata_endpoint_callback'), // Callback
             'uvembed-metadata', // Page
             'uvembed_metadata_section' // Section
+        );
+
+
+
+        add_settings_section(
+            'uvembed_metadata_configurl_section', // ID
+            'Config URL', // Title
+            array($this, 'print_uvembed_metadata_configurl_section_info'), // Callback
+            'uvembed-metadata' // Page
+        );
+        
+        add_settings_field(
+            'uvembed_metadata_configurl', // ID
+            'Config Url', // Title
+            array($this, 'uvembed_metadata_configurl_callback'), // Callback
+            'uvembed-metadata', // Page
+            'uvembed_metadata_configurl_section' // Section
+        );
+
+
+
+        add_settings_section(
+            'uvembed_metadata_embedurl_section', // ID
+            'Embed URL', // Title
+            array($this, 'print_uvembed_metadata_embedurl_section_info'), // Callback
+            'uvembed-metadata' // Page
+        );
+        
+        add_settings_field(
+            'uvembed_metadata_embedurl', // ID
+            'Embed Url', // Title
+            array($this, 'uvembed_metadata_embedurl_callback'), // Callback
+            'uvembed-metadata', // Page
+            'uvembed_metadata_embedurl_section' // Section
         );
 
 
@@ -112,6 +147,14 @@ class Uvembed_Metadata_Settings
         if (isset($input['uvembed_metadata_endpoint'])) {
             $new_input['uvembed_metadata_endpoint'] = sanitize_text_field($input['uvembed_metadata_endpoint']);
         }
+        
+        if (isset($input['uvembed_metadata_configurl'])) {
+            $new_input['uvembed_metadata_configurl'] = sanitize_text_field($input['uvembed_metadata_configurl']);
+        }
+        
+        if (isset($input['uvembed_metadata_embedurl'])) {
+            $new_input['uvembed_metadata_embedurl'] = sanitize_text_field($input['uvembed_metadata_embedurl']);
+        }
 
 
         return $new_input;
@@ -127,6 +170,23 @@ class Uvembed_Metadata_Settings
     }
 
     /**
+     * Print the Section's instruction text
+     */
+    public function print_uvembed_metadata_configurl_section_info()
+    {
+        $instructions = 'Default config url: <strong>http://universalviewer.io/config.json</strong>';
+        print $instructions;
+    }
+    /**
+     * Print the Section's instruction text
+     */
+    public function print_uvembed_metadata_embedurl_section_info()
+    {
+        $instructions = 'Default embed url: <strong>http://universalviewer.io/uv/lib/embed.js</strong>';
+        print $instructions;
+    }
+
+    /**
      * Markup for the field.
      */
     public function uvembed_metadata_endpoint_callback()
@@ -134,6 +194,28 @@ class Uvembed_Metadata_Settings
         printf(
             '<input type="text" id="uvembed_metadata_endpoint" name="uvembed_metadata_group_name[uvembed_metadata_endpoint]" style="width: 90%%" value="%s" />',
             isset($this->options['uvembed_metadata_endpoint']) ? esc_attr($this->options['uvembed_metadata_endpoint']) : ''
+        );
+    }
+
+    /**
+     * Markup for the field.
+     */
+    public function uvembed_metadata_configurl_callback()
+    {
+        printf(
+            '<input type="text" id="uvembed_metadata_configurl" name="uvembed_metadata_group_name[uvembed_metadata_configurl]" style="width: 90%%" value="%s" />',
+            isset($this->options['uvembed_metadata_configurl']) ? esc_attr($this->options['uvembed_metadata_configurl']) : ''
+        );
+    }
+
+    /**
+     * Markup for the field.
+     */
+    public function uvembed_metadata_embedurl_callback()
+    {
+        printf(
+            '<input type="text" id="uvembed_metadata_embedurl" name="uvembed_metadata_group_name[uvembed_metadata_embedurl]" style="width: 90%%" value="%s" />',
+            isset($this->options['uvembed_metadata_embedurl']) ? esc_attr($this->options['uvembed_metadata_embedurl']) : ''
         );
     }
 

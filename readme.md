@@ -3,7 +3,7 @@ Contributors: Hannah Nicholas
 Tags:  
 Requires at least: 4.0.0  
 Tested up to: 4.5.3  
-Stable tag: 1.0.0  
+Stable tag: 1.0.1 
 License: GPLv3 or later  
 License URI: http://www.gnu.org/licenses/gpl-3.0.html  
 
@@ -34,6 +34,10 @@ We encourage everyone to contribute their ideas, thoughts and code snippets. Thi
 ![The settings screen](settings-screenshot.png "Settings screen")
 
 ## Upgrade Notice
+
+### 1.0.1 ###
+* 2016-11-02
+* Added ability to update all urls in shortcode through settings.
 
 ### 1.0.0 ###
 * 2016-08-15
