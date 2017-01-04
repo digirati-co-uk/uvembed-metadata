@@ -30,8 +30,9 @@ add_filter( 'posts_distinct_request', 'uvembed_metadata_distinct' );
  */
 function uvembed_metadata_add_to_search( $where ) {
 	global $wpdb, $wp;
+	$searchQuery = ( isset( $wp->query_vars['s'] ) ) ? $wp->query_vars['s'] : null;
 
-	if ( ! is_admin() && is_search() ) {
+	if ( ! is_admin() && is_search() && isset( $searchQuery ) ) {
 		$keys = implode( "','", array( 'uvembed_metadata_string' ) );
 		$where .= " OR ({$wpdb->postmeta}.meta_key IN('{$keys}') AND {$wpdb->postmeta}.meta_value LIKE '%{$wp->query_vars['s']}%')";
 	}
@@ -47,9 +48,14 @@ function uvembed_metadata_add_to_search( $where ) {
  * @return string
  */
 function uvembed_metadata_join_postmeta( $join ) {
-	global $wpdb;
+	global $wpdb, $wp;
+	$searchQuery = ( isset( $wp->query_vars['s'] ) ) ? $wp->query_vars['s'] : null;
 
-	return $join .= " LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id ";
+	if ( ! is_admin() && is_search() && isset( $searchQuery ) ) {
+		return $join .= " LEFT JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id ";
+	} else {
+		return $join;
+	}
 
 }
 
@@ -59,6 +65,11 @@ function uvembed_metadata_join_postmeta( $join ) {
  * @return string
  */
 function uvembed_metadata_distinct() {
-	return 'DISTINCT';
+	global $wp;
+	$searchQuery = ( isset( $wp->query_vars['s'] ) ) ? $wp->query_vars['s'] : null;
+
+	if ( ! is_admin() && is_search() && isset( $searchQuery ) ) {
+		return 'DISTINCT';
+	}
 }
 
