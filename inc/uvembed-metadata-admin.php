@@ -165,7 +165,7 @@ class Uvembed_Metadata_Settings
      */
     public function print_uvembed_metadata_endpoint_section_info()
     {
-        $instructions = 'Enter the UV embed end point here, replace the work ID with {{work}} eg/. <strong>http://www.rcvs.org.uk/{{work}}.manifest</strong>';
+        $instructions = 'Enter the UV embed end point here, replace the manifest Id with {{work}} e.g. <strong>https://mywebsite.co.uk/{{work}}.manifest</strong>';
         print $instructions;
     }
 
@@ -174,7 +174,7 @@ class Uvembed_Metadata_Settings
      */
     public function print_uvembed_metadata_configurl_section_info()
     {
-        $instructions = 'Default config url: <strong>http://universalviewer.io/config.json</strong>';
+        $instructions = 'JSON file containing viewer configuration options. Default: <strong>https://universalviewer.io/config.json</strong>';
         print $instructions;
     }
     /**
@@ -182,7 +182,7 @@ class Uvembed_Metadata_Settings
      */
     public function print_uvembed_metadata_embedurl_section_info()
     {
-        $instructions = 'Default embed url: <strong>http://universalviewer.io/uv/lib/embed.js</strong>';
+        $instructions = 'JavaScript file containing viewer embed script. Default: <strong>https://universalviewer.io/uv/lib/embed.js</strong>';
         print $instructions;
     }
 
