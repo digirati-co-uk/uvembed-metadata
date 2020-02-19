@@ -182,7 +182,7 @@ class Uvembed_Metadata_Settings
      */
     public function print_uvembed_metadata_embedurl_section_info()
     {
-        $instructions = 'JavaScript file containing viewer embed script. Default: <strong>https://universalviewer.io/uv/lib/embed.js</strong>';
+        $instructions = 'JavaScript file containing viewer embed script. Default: <strong>https://universalviewer.io/vendor/uv/lib/embed.js</strong>';
         print $instructions;
     }
 
